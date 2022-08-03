@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+// 单行注释
+
+/**
+这里是多行注释
+ */
+
+// 指定包地址
+option go_package = "../service";
+
+// this is a comment
+// protoc --go_out=. *.proto
+message Student {
+  // 字段名称:name  类型:string  序号:1
+  string name = 1;
+  bool male = 2;
+  // 类型 []int32
+  repeated int32 scores = 3;
+}
