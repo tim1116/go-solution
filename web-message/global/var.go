@@ -32,6 +32,9 @@ func init() {
 	user = viper.GetString(`database.username`)
 	pass = viper.GetString(`database.password`)
 	address = viper.GetString(`database.address`)
+	if os.Getenv("address") != "" {
+		address = os.Getenv("address")
+	}
 	dbname = viper.GetString(`database.dbname`)
 	charset = viper.GetString(`database.charset`)
 	parseTime = viper.GetBool(`database.parseTime`)

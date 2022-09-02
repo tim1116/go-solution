@@ -25,5 +25,5 @@ func main() {
 		fmt.Fprint(writer, "hello")
 	})
 	// 默认使用 DefaultServeMux
-	log.Fatal(http.ListenAndServe("127.0.0.1:8085", nil))
+	log.Fatal(http.ListenAndServe(":8085", nil))
 }
