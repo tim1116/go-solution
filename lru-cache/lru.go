@@ -28,15 +28,16 @@ func NewLrc(size int) *Lrc {
 // Set 写入缓存
 func (l *Lrc) Set(key string, value interface{}) {
 	l.lock.Lock()
-	defer l.lock.RLock()
+	defer l.lock.Unlock()
 
 	// 判断是否已经存在
 	if elem, ok := l.cacheMap[key]; ok {
 		l.list.MoveToFront(elem)
+		elem.Value.(*data).value = value
 		return
 	}
 
-	item := data{
+	item := &data{
 		key:   key,
 		value: value,
 	}
@@ -44,10 +45,41 @@ func (l *Lrc) Set(key string, value interface{}) {
 	l.cacheMap[key] = elem
 
 	// 判断是否超过长度限制
-	if l.list.Len() > l.size {
+	if l.list.Len() > l.size && l.size > 0 {
 		deleteItem := l.list.Back()
-		l.list.Remove(l.list.Back())
-		deleteKey := deleteItem.Value.(data).key
+		l.list.Remove(deleteItem)
+		deleteKey := deleteItem.Value.(*data).key
 		delete(l.cacheMap, deleteKey)
+	}
+}
+
+// Get 读取缓存
+func (l *Lrc) Get(key string) (interface{}, bool) {
+	l.lock.RLock()
+	value, ok := l.cacheMap[key]
+	l.lock.RUnlock()
+
+	if ok {
+		l.lock.Lock()
+		l.list.MoveToFront(value)
+		l.lock.Unlock()
+		return value.Value.(*data).value, true
+	} else {
+		return nil, false
+	}
+}
+
+// Delete 缓存
+func (l *Lrc) Delete(key string) {
+	l.lock.RLock()
+	value, ok := l.cacheMap[key]
+	l.lock.RUnlock()
+
+	if ok {
+		l.lock.Lock()
+		l.list.Remove(value)
+		key := value.Value.(*data).key
+		delete(l.cacheMap, key)
+		l.lock.Unlock()
 	}
 }
