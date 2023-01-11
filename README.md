@@ -2,15 +2,15 @@
 
 一些go解决方案
 
-- [协程池实现](workpool/README.md)
+- [协程池实现](workpool/)
 
-- [超时控制](timeout/README.md)
+- [超时控制](timeout/)
 
-- [前缀树](trie/README.md)
+- [前缀树](trie/)
   
-- [net/http+gorm实现web服务](web-message/README.md)
+- [net/http+gorm实现web服务](web-message/)
 
-- [protoBuf演示](pb1/README.md)
+- [protoBuf演示](pb1/)
 
 - [LRC cache](lru-cache/)
 
